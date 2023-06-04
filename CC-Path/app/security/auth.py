@@ -1,0 +1,32 @@
+from passlib.context import CryptContext
+from jose import jwt
+from datetime import datetime, timedelta
+from app.config import SECRET_KEY, ALGORITHM
+from fastapi import HTTPException
+from jose import JWTError
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+# Generate hashed password
+def get_password_hash(password):
+    return pwd_context.hash(password)
+
+# Verify password
+def verify_password(plain_password, hashed_password):
+    return pwd_context.verify(plain_password, hashed_password)
+
+# Generate access token
+def create_access_token(data: dict, expires_delta: timedelta):
+    to_encode = data.copy()
+    expire = datetime.utcnow() + expires_delta
+    to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return encoded_jwt
+
+# Decode access token
+def decode_access_token(token: str):
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        return payload
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Invalid token")
