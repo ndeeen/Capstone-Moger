@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Moger</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="logout">Logout</string>
+    <string name="postNewStory">Post New Story</string>
+    <string name="storyDescription">Story Description</string>
+    <string name="post">POST</string>
+    <string name="contentLoading">Loading Content</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="login">Login</string>
+    <string name="dontHaveAnyAccount">Don"'"t have any account"?"</string>
+    <string name="signUp">Sign Up</string>
+    <string name="welcome">Hello, Welcome!</string>
+    <string name="name">Name</string>
+    <string name="register">Register</string>
+    <string name="helloNewUser">Hello, New User!</string>
+    <string name="chooseAPicture">Choose a picture</string>
+    <string name="notGranted">Permission is not granted</string>
+    <string name="pleaseSelectImage">Please select image first</string>
+    <string name="emailRequired">Email must be filled</string>
+    <string name="passRequired">Password must be filled</string>
+    <string name="nameRequired">Please fill the empty name column</string>
+    <string name="passRule">Password must be at least 8 characters</string>
+    <string name="userCreated">User created</string>
+    <string name="wantLogoutQuestion">Are you sure want to logout from this account?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+</resources>
