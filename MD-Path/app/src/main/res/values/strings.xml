@@ -27,4 +27,7 @@
     <string name="wantLogoutQuestion">Are you sure want to logout from this account?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="searchgroup">Search Group Name</string>
+    <string name="leave">Leave</string>
+    <string name="enter">Enter</string>
 </resources>
