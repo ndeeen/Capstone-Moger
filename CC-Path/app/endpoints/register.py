@@ -1,11 +1,16 @@
 from fastapi import APIRouter, Depends, HTTPException
-from app.models.user import User
+from pydantic import BaseModel
 from app.database.connection import get_database_connection
 from app.utils.password import get_password_hash
 
 router = APIRouter()
 
-@router.post("/register")
+class User(BaseModel):
+    email: str
+    name: str
+    password: str
+
+@router.post("/register", tags=["Register"])
 async def register(user: User, connection = Depends(get_database_connection)):
     # Check if the email is already registered
     query = "SELECT * FROM user WHERE email = %s"
