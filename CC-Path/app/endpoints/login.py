@@ -31,4 +31,4 @@ async def login(user: User, connection = Depends(get_database_connection)):
 
     # User not found or password incorrect
     # raise HTTPException(status_code=401, return {"status_login":  str(statusLogin),  "access_token": access_token, "name": result[1]})
-    return JSONResponse(status_code=401, content={"status_login":  str(statusLogin),  "access_token": "Null", "name": "Null"})
+    return JSONResponse(status_code=401, content={"status_login":  str(statusLogin),  "access_token": "", "name": ""})
