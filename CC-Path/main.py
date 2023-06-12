@@ -1,8 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.endpoints import login, register
+from app.endpoints import login, register, transaction, wallet
 
-app = FastAPI()
+app = FastAPI(title="Moger API", description="API yang berisi segala kebutuhan aplikasi Moger")
+
+@app.get("/", tags=["Root"])
+async def welcome_text():
+	return {"Selamat datang di Moger API"}
+
 
 # Configure CORS settings
 app.add_middleware(
@@ -15,3 +20,5 @@ app.add_middleware(
 
 app.include_router(login.router)
 app.include_router(register.router)
+app.include_router(transaction.router)  
+app.include_router(wallet.router)

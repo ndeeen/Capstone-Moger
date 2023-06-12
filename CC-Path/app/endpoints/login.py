@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from datetime import timedelta
-from app.models.user import UserLogin
+from pydantic import BaseModel
 from app.database.connection import get_database_connection
 from app.utils.password import verify_password
 from app.security.auth import create_access_token
@@ -8,8 +8,12 @@ from app.config import ACCESS_TOKEN_EXPIRE_MINUTES
 
 router = APIRouter()
 
-@router.post("/login")
-async def login(user: UserLogin, connection = Depends(get_database_connection)):
+class User(BaseModel):
+    email: str
+    password: str
+
+@router.post("/login", tags=["Login"])
+async def login(user: User, connection = Depends(get_database_connection)):
     # Find the user in the database
     query = "SELECT * FROM user WHERE email = %s"
     cursor = connection.cursor()
