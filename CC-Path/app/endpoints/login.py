@@ -19,7 +19,7 @@ async def login(user: UserLogin, connection = Depends(get_database_connection)):
     if result and verify_password(user.password, result[2]):
         access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
         access_token = create_access_token(data={"sub": user.email}, expires_delta=access_token_expires)
-        return {"access_token": access_token, "token_type": "bearer"}
+        return {"access_token": access_token, "token_type": "bearer", "name": result[1]}
     
     # User not found or password incorrect
     raise HTTPException(status_code=401, detail="Invalid email or password")
