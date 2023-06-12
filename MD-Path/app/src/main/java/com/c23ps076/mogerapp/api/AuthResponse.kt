@@ -1,4 +1,5 @@
 package com.c23ps076.mogerapp.api
+import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 data class AuthSession(
@@ -7,6 +8,13 @@ data class AuthSession(
     var still_login: Boolean
 )
 
+data class UserLoginRequest(
+    @SerializedName("email")
+    var email: String,
+
+    @SerializedName("password")
+    var password: String
+)
 data class UserLoginResponse(
     @field:SerializedName("name")
     var name: String,

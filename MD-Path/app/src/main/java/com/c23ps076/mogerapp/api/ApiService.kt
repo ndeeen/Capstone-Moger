@@ -13,13 +13,12 @@ import java.util.concurrent.TimeUnit
 import com.c23ps076.mogerapp.BuildConfig.BASE_URL
 
 import com.c23ps076.mogerapp.api.UserLoginResponse
+import com.c23ps076.mogerapp.api.UserLoginRequest
 
 interface ApiService {
-    @FormUrlEncoded
     @POST("login")
     fun loginUser(
-        @Field("email") email: String,
-        @Field("password") password: String
+        @Body request: UserLoginRequest
     ): Call<UserLoginResponse>
 
 
@@ -28,29 +27,29 @@ interface ApiService {
         private const val TOKEN_SAMPLE =
             "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyb2ZpZkBnbWFpbC5jb20iLCJleHAiOjE2ODY1NTcxMjJ9.mg7UsqtOHyvejbsActoEm-oUUmjkkvPHgxCLpE93IQU"
 
-        private val gson = GsonBuilder()
-            .setPrettyPrinting()
-            .setLenient()
-            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-            .create()
-
-        private val loggingInterceptor = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        }
-
-        private val okHttpClient = OkHttpClient.Builder()
-            .addInterceptor(loggingInterceptor)
-            .readTimeout(30, TimeUnit.SECONDS)
-            .build()
-
-        fun create(): ApiService {
-            return Retrofit.Builder()
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .baseUrl(BASE_URL)
-                .client(okHttpClient)
-                .build()
-                .create(ApiService::class.java)
-        }
+//        private val gson = GsonBuilder()
+//            .setPrettyPrinting()
+//            .setLenient()
+//            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+//            .create()
+//
+//        private val loggingInterceptor = HttpLoggingInterceptor().apply {
+//            level = HttpLoggingInterceptor.Level.BODY
+//        }
+//
+//        private val okHttpClient = OkHttpClient.Builder()
+//            .addInterceptor(loggingInterceptor)
+//            .readTimeout(30, TimeUnit.SECONDS)
+//            .build()
+//
+//        fun create(): ApiService {
+//            return Retrofit.Builder()
+//                .addConverterFactory(GsonConverterFactory.create(gson))
+//                .baseUrl(BASE_URL)
+//                .client(okHttpClient)
+//                .build()
+//                .create(ApiService::class.java)
+//        }
 
     }
 }

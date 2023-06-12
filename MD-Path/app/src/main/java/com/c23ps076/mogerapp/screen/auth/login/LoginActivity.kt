@@ -1,19 +1,23 @@
 package com.c23ps076.mogerapp.screen.auth.login
 
+import android.app.Activity
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import com.c23ps076.mogerapp.api.Preferences
 import com.c23ps076.mogerapp.databinding.ActivityLoginBinding
 import com.c23ps076.mogerapp.BuildConfig.PREF_NAME
+import com.c23ps076.mogerapp.MainActivity
 import com.c23ps076.mogerapp.R
 import com.c23ps076.mogerapp.api.AuthSession
 import com.c23ps076.mogerapp.screen.auth.PasswordCustomView
+import com.c23ps076.mogerapp.screen.dummyscreen.DummyActivity
 import com.c23ps076.mogerapp.screen.groupList.GroupListActivity
 
 class LoginActivity : AppCompatActivity() {
@@ -95,15 +99,16 @@ class LoginActivity : AppCompatActivity() {
                             it.name, it.access_token, true
                         )
                         loginUserPreferences.setUserLogin(currentUser)
-
-                        val intent = Intent(this@LoginActivity, GroupListActivity::class.java)
-                        startActivity(intent)
+                        startActivity(Intent(this@LoginActivity, DummyActivity::class.java))
+                        this@LoginActivity.finish()
                     }
                 }
                 catch (e: Exception){
                     e.printStackTrace()
                 }
             }
+
         }
+
     }
 }
