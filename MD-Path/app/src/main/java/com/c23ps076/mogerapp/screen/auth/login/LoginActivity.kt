@@ -99,7 +99,7 @@ class LoginActivity : AppCompatActivity() {
                             it.name, it.access_token, true
                         )
                         loginUserPreferences.setUserLogin(currentUser)
-                        startActivity(Intent(this@LoginActivity, DummyActivity::class.java))
+                        startActivity(Intent(this@LoginActivity, GroupListActivity::class.java))
                         this@LoginActivity.finish()
                     }
                 }

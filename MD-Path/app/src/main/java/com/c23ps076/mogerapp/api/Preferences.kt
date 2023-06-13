@@ -34,4 +34,14 @@ class Preferences(context: Context) {
     fun clearLoginData() {
         setUserLogin(AuthSession("", "", false))
     }
+
+    fun logout() {
+        editor.apply {
+            remove(NAME_KEY)
+            remove(TOKEN_KEY)
+            putBoolean(STILL_LOGIN_KEY, false)
+            apply()
+        }
+
+    }
 }

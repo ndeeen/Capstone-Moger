@@ -7,6 +7,7 @@ import android.util.Log
 import com.c23ps076.mogerapp.api.Preferences
 import com.c23ps076.mogerapp.screen.auth.login.LoginActivity
 import com.c23ps076.mogerapp.screen.dummyscreen.DummyActivity
+import com.c23ps076.mogerapp.screen.groupList.GroupListActivity
 
 class MainActivity : AppCompatActivity() {
     lateinit var userLogPreference: Preferences
@@ -21,7 +22,7 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
         else {
-            val intent = Intent(this, DummyActivity::class.java)
+            val intent = Intent(this, GroupListActivity::class.java)
             startActivity(intent)
             finish()
         }
