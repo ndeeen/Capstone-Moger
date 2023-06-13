@@ -4,9 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import com.c23ps076.mogerapp.api.Preferences
+import com.c23ps076.mogerapp.api.utils.Preferences
 import com.c23ps076.mogerapp.screen.auth.login.LoginActivity
-import com.c23ps076.mogerapp.screen.dummyscreen.DummyActivity
 import com.c23ps076.mogerapp.screen.groupList.GroupListActivity
 
 class MainActivity : AppCompatActivity() {

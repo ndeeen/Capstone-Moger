@@ -5,7 +5,8 @@ import com.google.gson.annotations.SerializedName
 data class AuthSession(
     var name: String,
     var access_token: String,
-    var still_login: Boolean
+    var still_login: Boolean,
+    var email: String
 )
 
 data class UserLoginRequest(
@@ -24,6 +25,22 @@ data class UserLoginResponse(
 
     @field:SerializedName("status_login")
     var status_login: Boolean
+)
+
+data class UserRegisterRequest(
+    @SerializedName("name")
+    var name: String,
+
+    @SerializedName("email")
+    var email: String,
+
+    @SerializedName("password")
+    var password: String
+)
+
+data class UserRegisterResponse(
+    @SerializedName("message")
+    var message: String
 )
 
 

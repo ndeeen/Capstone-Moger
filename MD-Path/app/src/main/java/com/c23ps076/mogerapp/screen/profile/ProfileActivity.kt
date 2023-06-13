@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import com.c23ps076.mogerapp.R
 import com.c23ps076.mogerapp.databinding.ActivityProfileBinding
-import com.c23ps076.mogerapp.api.Preferences
+import com.c23ps076.mogerapp.api.utils.Preferences
 import com.c23ps076.mogerapp.screen.auth.login.LoginActivity
 
 class ProfileActivity : AppCompatActivity() {
@@ -27,6 +27,7 @@ class ProfileActivity : AppCompatActivity() {
     private fun initialize() {
         activityProfileBinding.apply {
             tvProfileName.text = userLogPreferences.getLoginData().name.toString()
+            tvProfileEmail.text = userLogPreferences.getLoginData().email.toString()
 
             btnLogout.setOnClickListener {
                 logout()

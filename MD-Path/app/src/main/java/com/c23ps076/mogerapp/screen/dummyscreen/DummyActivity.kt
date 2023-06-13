@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.c23ps076.mogerapp.R
-import com.c23ps076.mogerapp.api.Preferences
+import com.c23ps076.mogerapp.api.utils.Preferences
 
 class DummyActivity : AppCompatActivity() {
     private lateinit var userLogPreference: Preferences

@@ -21,6 +21,11 @@ interface ApiService {
         @Body request: UserLoginRequest
     ): Call<UserLoginResponse>
 
+    @POST("register")
+    fun registerUser(
+        @Body request: UserRegisterRequest
+    ): Call<UserRegisterResponse>
+
 
 
     companion object {
