@@ -82,7 +82,7 @@ async def get_member_lists(
     data_member = get_member_list(partyname, connection)
     
     for member in data_member:
-        if host_email == member['email']:
+        if host_email and member['email'].strip().lower() == host_email['createdBy'].strip().lower():
             member["isHost"] = 1
         else:
             member["isHost"] = 0
