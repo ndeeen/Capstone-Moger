@@ -1,6 +1,5 @@
 package com.c23ps076.mogerapp.screen.auth.login
 
-import android.text.Editable
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

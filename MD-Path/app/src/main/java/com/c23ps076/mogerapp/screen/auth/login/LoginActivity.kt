@@ -14,6 +14,7 @@ import com.c23ps076.mogerapp.BuildConfig.PREF_NAME
 import com.c23ps076.mogerapp.R
 import com.c23ps076.mogerapp.api.AuthSession
 import com.c23ps076.mogerapp.screen.auth.PasswordCustomView
+import com.c23ps076.mogerapp.screen.auth.register.RegisterActivity
 import com.c23ps076.mogerapp.screen.groupList.GroupListActivity
 
 class LoginActivity : AppCompatActivity() {
@@ -26,6 +27,7 @@ class LoginActivity : AppCompatActivity() {
         activityLoginBinding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(activityLoginBinding?.root)
 
+        supportActionBar?.hide()
         showLoading(false)
         loginViewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
         loginViewModel.responseMessage.observe(this) {
@@ -37,7 +39,12 @@ class LoginActivity : AppCompatActivity() {
 
         activityLoginBinding?.apply {
             button.setOnClickListener {
+                showLoading(true)
                 validateLoginField()
+                showLoading(false)
+            }
+            tvSignUp.setOnClickListener {
+                startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
             }
         }
     }
@@ -106,5 +113,10 @@ class LoginActivity : AppCompatActivity() {
 
         }
 
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        activityLoginBinding = null
     }
 }

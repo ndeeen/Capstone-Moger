@@ -23,7 +23,7 @@
     <string name="passRequired">Password must be filled</string>
     <string name="nameRequired">Please fill the empty name column</string>
     <string name="passRule">Password must be at least 8 characters</string>
-    <string name="userCreated">User created</string>
+    <string name="userCreated">User registered successfully</string>
     <string name="wantLogoutQuestion">Are you sure want to logout from this account?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>

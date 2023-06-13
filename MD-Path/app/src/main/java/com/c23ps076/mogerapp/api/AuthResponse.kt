@@ -28,11 +28,11 @@ data class UserLoginResponse(
 )
 
 data class UserRegisterRequest(
-    @SerializedName("name")
-    var name: String,
-
     @SerializedName("email")
     var email: String,
+
+    @SerializedName("name")
+    var name: String,
 
     @SerializedName("password")
     var password: String

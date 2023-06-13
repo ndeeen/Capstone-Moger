@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <EditText
+            <com.c23ps076.mogerapp.screen.auth.PasswordCustomView
                 android:id="@+id/et_reg_password"
                 android:layout_width="300dp"
                 android:layout_height="40dp"
