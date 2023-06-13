@@ -118,7 +118,7 @@ def get_member_list(partyName, connection):
     return read_row
 
 def get_balance_from_party(partyName, connection):
-    queryfinal = f"SELECT IFNULL(SUM(ballance), 0) AS balance FROM wallet WHERE partyName = '{partyName}'"
+    queryfinal = f"SELECT IFNULL(SUM(balance), 0) AS balance FROM wallet WHERE partyName = '{partyName}'"
     cursor = connection.cursor(dictionary=True)
     cursor.execute(queryfinal)
     read_row = cursor.fetchall()
