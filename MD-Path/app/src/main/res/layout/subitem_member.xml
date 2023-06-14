@@ -5,6 +5,7 @@
     android:layout_width="wrap_content"
     android:background="@drawable/member_bg"
     android:paddingVertical="5dp"
+    android:layout_marginBottom="4dp"
     android:paddingHorizontal="10dp"
     android:layout_height="wrap_content">
 
@@ -14,6 +15,7 @@
         android:layout_height="wrap_content"
         android:text="@string/contentLoading"
         android:textColor="@color/black"
+        android:textSize="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

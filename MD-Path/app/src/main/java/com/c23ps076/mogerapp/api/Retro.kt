@@ -6,10 +6,10 @@ import com.c23ps076.mogerapp.BuildConfig.BASE_URL
 import retrofit2.converter.gson.GsonConverterFactory
 
 class Retro {
-    fun getRetroClientInstance(): Retrofit {
+    fun getRetroClientInstance(url: String): Retrofit {
         val gson = GsonBuilder().setLenient().create()
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(url)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
     }

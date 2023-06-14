@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.c23ps076.mogerapp.BuildConfig.BASE_URL
 import com.c23ps076.mogerapp.api.ApiService
 import com.c23ps076.mogerapp.api.Retro
 import com.c23ps076.mogerapp.api.UserLoginRequest
@@ -25,7 +26,7 @@ class LoginViewModel: ViewModel() {
 
 
     fun doLogin(email: String, password: String) {
-        val services = Retro().getRetroClientInstance().create(ApiService::class.java)
+        val services = Retro().getRetroClientInstance(BASE_URL).create(ApiService::class.java)
         _statusLoading.value = false
         val req = UserLoginRequest(email, password)
         services.loginUser(req)

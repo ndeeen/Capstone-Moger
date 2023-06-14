@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.c23ps076.mogerapp.BuildConfig.BASE_URL
 import com.c23ps076.mogerapp.api.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -20,7 +21,7 @@ class RegisterViewModel: ViewModel() {
     val responseMessage: LiveData<String> = _responseMessage
 
     fun doRegister(email: String, name: String, password: String) {
-        val services = Retro().getRetroClientInstance().create(ApiService::class.java)
+        val services = Retro().getRetroClientInstance(BASE_URL).create(ApiService::class.java)
         _statusLoading.value = false
         val req = UserRegisterRequest(email, name, password)
         services.registerUser(req)

@@ -14,6 +14,7 @@ import com.c23ps076.mogerapp.BuildConfig.BASE_URL
 
 import com.c23ps076.mogerapp.api.UserLoginResponse
 import com.c23ps076.mogerapp.api.UserLoginRequest
+import com.c23ps076.mogerapp.api.data.GroupInfo
 
 interface ApiService {
     @POST("login")
@@ -25,6 +26,11 @@ interface ApiService {
     fun registerUser(
         @Body request: UserRegisterRequest
     ): Call<UserRegisterResponse>
+
+    @GET("getPartyList/{email}")
+    fun getPartyList(
+        @Path("email") email: String
+    ): Call<ArrayList<GroupInfo>>
 
 
 
