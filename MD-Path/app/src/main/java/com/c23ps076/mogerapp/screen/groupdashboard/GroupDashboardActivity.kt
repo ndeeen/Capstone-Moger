@@ -4,6 +4,9 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.c23ps076.mogerapp.R
@@ -29,6 +32,12 @@ class GroupDashboardActivity : AppCompatActivity() {
     lateinit var partyName: String
     private val listTransactionInfo = ArrayList<TransactionInfo>()
 
+    private val rotateOpen: Animation by lazy { AnimationUtils.loadAnimation(this, R.anim.rotate_open_anim) }
+    private val rotateClose: Animation by lazy { AnimationUtils.loadAnimation(this, R.anim.rotate_close_anim) }
+    private val fromBottom: Animation by lazy { AnimationUtils.loadAnimation(this, R.anim.from_bottom_anim) }
+    private val toBottom: Animation by lazy { AnimationUtils.loadAnimation(this, R.anim.to_bottom_anim) }
+
+    private var clickedButton = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activityGroupDashboardBinding = ActivityGroupDashboardBinding.inflate(layoutInflater)
@@ -37,6 +46,10 @@ class GroupDashboardActivity : AppCompatActivity() {
         partyName = intent.getStringExtra("PARTYNAME").toString()
         supportActionBar?.setTitle(partyName)
         supportActionBar?.show()
+
+        btn_expands.setOnClickListener {
+            addExpandButton()
+        }
 
         activityGroupDashboardBinding?.apply {
             btnPreviousMonth.setOnClickListener{
@@ -47,8 +60,44 @@ class GroupDashboardActivity : AppCompatActivity() {
             }
             rv_transactions.setHasFixedSize(true)
             rv_transactions.layoutManager = LinearLayoutManager(this@GroupDashboardActivity)
+
+
         }
         changeSelectedMonthYear()
+    }
+
+    private fun addExpandButton() {
+        setVisibility(clickedButton)
+        setAnimation(clickedButton)
+        clickedButton = !clickedButton
+    }
+
+    private fun setVisibility(clicked: Boolean) {
+        if (!clicked) {
+            btn_add_transaction.visibility = View.VISIBLE
+            btn_manage_wallet.visibility = View.VISIBLE
+            btn_manage_member.visibility = View.VISIBLE
+        }
+        else {
+            btn_add_transaction.visibility = View.INVISIBLE
+            btn_manage_wallet.visibility = View.INVISIBLE
+            btn_manage_member.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun setAnimation(clicked: Boolean) {
+        if (!clicked) {
+            btn_expands.startAnimation(rotateOpen)
+            btn_add_transaction.startAnimation(fromBottom)
+            btn_manage_wallet.startAnimation(fromBottom)
+            btn_manage_member.startAnimation(fromBottom)
+        }
+        else {
+            btn_expands.startAnimation(rotateClose)
+            btn_add_transaction.startAnimation(toBottom)
+            btn_manage_wallet.startAnimation(toBottom)
+            btn_manage_member.startAnimation(toBottom)
+        }
     }
 
     fun getTransactionData() {
