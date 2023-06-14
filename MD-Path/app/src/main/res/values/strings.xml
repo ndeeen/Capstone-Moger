@@ -32,4 +32,15 @@
     <string name="enter">Enter</string>
     <string name="profile">Profile</string>
     <string name="grouplist">Group List</string>
+    <string name="selectedMonth">%1$s, %2$s</string>
+    <string name="income">Income</string>
+    <string name="outcome">Outcome</string>
+    <string name="moneyValue">Rp.%1$s</string>
+    <string name="day">Day %1$s</string>
+
+    <string name="kind">Kind</string>
+    <string name="from">From</string>
+    <string name="category">Category</string>
+    <string name="amount">Amount</string>
+    <string name="createdBy">Created By</string>
 </resources>
