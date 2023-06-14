@@ -1,5 +1,6 @@
 package com.c23ps076.mogerapp.screen.groupList
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.c23ps076.mogerapp.R
 import com.c23ps076.mogerapp.api.data.GroupInfo
 import com.c23ps076.mogerapp.api.data.MemberEmail
+import com.c23ps076.mogerapp.screen.groupdashboard.GroupDashboardActivity
 import kotlinx.android.synthetic.main.item_group.view.*
 
 class GroupListParentAdapter(private val listGroupInfo: ArrayList<GroupInfo>)
@@ -26,6 +28,14 @@ class GroupListParentAdapter(private val listGroupInfo: ArrayList<GroupInfo>)
                     val listMember: ArrayList<MemberEmail> = groupInfo.members
                     val adapter = GroupListChildAdapter(listMember)
                     rvChild.adapter = adapter
+
+                    btn_entergroup.setOnClickListener{
+                        val intent = Intent(itemView.context, GroupDashboardActivity::class.java)
+                        intent.apply {
+                            putExtra("PARTYNAME", groupInfo.partyName)
+                        }
+                        itemView.context.startActivity(intent)
+                    }
                 }
             }
         }
@@ -41,7 +51,5 @@ class GroupListParentAdapter(private val listGroupInfo: ArrayList<GroupInfo>)
 
     override fun onBindViewHolder(holder: GroupInfoViewHolder, position: Int) {
         holder.bind(listGroupInfo[position])
-
-
     }
 }
