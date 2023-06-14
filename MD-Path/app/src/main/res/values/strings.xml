@@ -43,4 +43,6 @@
     <string name="category">Category</string>
     <string name="amount">Amount</string>
     <string name="createdBy">Created By</string>
+    <string name="typeanemail">Type an Email</string>
+    <string name="addmember">Add Member</string>
 </resources>
