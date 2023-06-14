@@ -1,6 +1,7 @@
 package com.c23ps076.mogerapp.screen.auth.login
 
 import android.util.Log
+import androidx.datastore.preferences.protobuf.Api
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -26,7 +27,7 @@ class LoginViewModel: ViewModel() {
 
 
     fun doLogin(email: String, password: String) {
-        val services = Retro().getRetroClientInstance(BASE_URL).create(ApiService::class.java)
+        val services = ApiService.create(BASE_URL)
         _statusLoading.value = false
         val req = UserLoginRequest(email, password)
         services.loginUser(req)

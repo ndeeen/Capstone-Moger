@@ -9,6 +9,7 @@ import android.view.MenuItem
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.c23ps076.mogerapp.R
+import com.c23ps076.mogerapp.api.ApiService
 import com.c23ps076.mogerapp.api.data.GroupInfo
 import com.c23ps076.mogerapp.api.utils.Preferences
 import com.c23ps076.mogerapp.api.utils.RetroLazy
@@ -50,26 +51,26 @@ class GroupListActivity : AppCompatActivity() {
     }
 
     fun getGroupList(email: String) {
-        RetroLazy.instance.getPartyList(email)
-            .enqueue(object : Callback<ArrayList<GroupInfo>> {
-                override fun onResponse(
-                    call: Call<ArrayList<GroupInfo>>,
-                    response: Response<ArrayList<GroupInfo>>
-                ) {
-                    Log.e("liat response", response.body().toString())
-                    response.body()?.let {
-                        listGroup.addAll(it)
-                    }
-                    val adapter = GroupListParentAdapter(listGroup)
-                    rv_grouplist.adapter = adapter
-                    Log.e("message","Data retrieved")
+        val service = ApiService.create("http://www.wakacipuy.my.id/dokuApp/")
+        service.getPartyList(email).enqueue(object : Callback<ArrayList<GroupInfo>> {
+            override fun onResponse(
+                call: Call<ArrayList<GroupInfo>>,
+                response: Response<ArrayList<GroupInfo>>
+            ) {
+                Log.e("liat response", response.body().toString())
+                response.body()?.let {
+                    listGroup.addAll(it)
                 }
+                val adapter = GroupListParentAdapter(listGroup)
+                rv_grouplist.adapter = adapter
+                Log.e("message","Data retrieved")
+            }
 
-                override fun onFailure(call: Call<ArrayList<GroupInfo>>, t: Throwable) {
-                    Log.e("message","Retrieve Failed")
-                }
+            override fun onFailure(call: Call<ArrayList<GroupInfo>>, t: Throwable) {
+                Log.e("message","Retrieve Failed")
+            }
 
-            })
+        })
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)

@@ -80,13 +80,12 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.15"
             android:background="@drawable/linear_bg_white_mirror"
-            android:fontFamily="sans-serif-condensed-light"
+            android:fontFamily="sans-serif-condensed-medium"
             android:gravity="start|center_vertical"
             android:paddingVertical="2dp"
 
             android:paddingStart="4dp"
             android:text="@string/amount"
-            android:textColor="@color/white"
             android:textSize="10sp" />
 
         <ImageView

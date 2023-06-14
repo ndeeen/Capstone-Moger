@@ -15,6 +15,8 @@ import com.c23ps076.mogerapp.BuildConfig.BASE_URL
 import com.c23ps076.mogerapp.api.UserLoginResponse
 import com.c23ps076.mogerapp.api.UserLoginRequest
 import com.c23ps076.mogerapp.api.data.GroupInfo
+import com.c23ps076.mogerapp.api.data.IncomeOutcome
+import com.c23ps076.mogerapp.api.data.TransactionInfo
 
 interface ApiService {
     @POST("login")
@@ -32,35 +34,49 @@ interface ApiService {
         @Path("email") email: String
     ): Call<ArrayList<GroupInfo>>
 
+    @GET("getIncomeOutcome/{partyName}/{month}/{year}")
+    fun getIncomeOutcome(
+        @Path("partyName") partyName: String,
+        @Path("month") month: String,
+        @Path("year") year: String
+    ): Call<IncomeOutcome>
+
+    @GET("getTransaction/{partyName}/{month}/{year}")
+    fun getTransaction(
+        @Path("partyName") partyName: String,
+        @Path("month") month: String,
+        @Path("year") year: String
+    ): Call<ArrayList<TransactionInfo>>
+
 
 
     companion object {
         private const val TOKEN_SAMPLE =
             "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyb2ZpZkBnbWFpbC5jb20iLCJleHAiOjE2ODY1NTcxMjJ9.mg7UsqtOHyvejbsActoEm-oUUmjkkvPHgxCLpE93IQU"
 
-//        private val gson = GsonBuilder()
-//            .setPrettyPrinting()
-//            .setLenient()
-//            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-//            .create()
-//
-//        private val loggingInterceptor = HttpLoggingInterceptor().apply {
-//            level = HttpLoggingInterceptor.Level.BODY
-//        }
-//
-//        private val okHttpClient = OkHttpClient.Builder()
-//            .addInterceptor(loggingInterceptor)
-//            .readTimeout(30, TimeUnit.SECONDS)
-//            .build()
-//
-//        fun create(): ApiService {
-//            return Retrofit.Builder()
-//                .addConverterFactory(GsonConverterFactory.create(gson))
-//                .baseUrl(BASE_URL)
-//                .client(okHttpClient)
-//                .build()
-//                .create(ApiService::class.java)
-//        }
+        private val gson = GsonBuilder()
+            .setPrettyPrinting()
+            .setLenient()
+            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+            .create()
+
+        private val loggingInterceptor = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+
+        private val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor(loggingInterceptor)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .build()
+
+        fun create(url: String): ApiService {
+            return Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .baseUrl(url)
+                .client(okHttpClient)
+                .build()
+                .create(ApiService::class.java)
+        }
 
     }
 }

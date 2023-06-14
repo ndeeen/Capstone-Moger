@@ -1,6 +1,7 @@
 package com.c23ps076.mogerapp.screen.auth.register
 
 import android.util.Log
+import androidx.datastore.preferences.protobuf.Api
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -21,7 +22,7 @@ class RegisterViewModel: ViewModel() {
     val responseMessage: LiveData<String> = _responseMessage
 
     fun doRegister(email: String, name: String, password: String) {
-        val services = Retro().getRetroClientInstance(BASE_URL).create(ApiService::class.java)
+        val services = ApiService.create(BASE_URL)
         _statusLoading.value = false
         val req = UserRegisterRequest(email, name, password)
         services.registerUser(req)

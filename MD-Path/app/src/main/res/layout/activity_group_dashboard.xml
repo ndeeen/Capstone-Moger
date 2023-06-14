@@ -29,8 +29,9 @@
 
         <TextView
             android:id="@+id/tv_selected_month_and_year"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:fontFamily="sans-serif-condensed-medium"
             android:text="@string/selectedMonth"
             android:textColor="@color/white"
@@ -112,10 +113,10 @@
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_transactions"
         android:layout_width="409dp"
         android:layout_height="656dp"
         android:layout_marginTop="1dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
