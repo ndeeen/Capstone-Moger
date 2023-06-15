@@ -17,6 +17,7 @@ import com.c23ps076.mogerapp.api.data.TransactionInfo
 import com.c23ps076.mogerapp.api.utils.Preferences
 import com.c23ps076.mogerapp.api.utils.RetroLazy
 import com.c23ps076.mogerapp.databinding.ActivityGroupDashboardBinding
+import com.c23ps076.mogerapp.screen.addTransaction.AddTransactionActivity
 import com.c23ps076.mogerapp.screen.membermanagement.MemberManagementActivity
 import kotlinx.android.synthetic.main.activity_group_dashboard.*
 import kotlinx.android.synthetic.main.item_transaction_groupby_day.*
@@ -61,8 +62,15 @@ class GroupDashboardActivity : AppCompatActivity() {
             btnNextMonth.setOnClickListener {
                 previousNextMonthYear(1)
             }
-            btn_manage_member.setOnClickListener {
+            btnManageMember.setOnClickListener {
                 val intentMember = Intent(this@GroupDashboardActivity, MemberManagementActivity::class.java)
+                intentMember.apply {
+                    putExtra("PARTYNAME", partyName)
+                }
+                startActivity(intentMember)
+            }
+            btnAddTransaction.setOnClickListener {
+                val intentMember = Intent(this@GroupDashboardActivity, AddTransactionActivity::class.java)
                 intentMember.apply {
                     putExtra("PARTYNAME", partyName)
                 }

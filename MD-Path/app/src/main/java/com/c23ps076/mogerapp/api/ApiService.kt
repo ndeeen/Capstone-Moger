@@ -14,10 +14,7 @@ import com.c23ps076.mogerapp.BuildConfig.BASE_URL
 
 import com.c23ps076.mogerapp.api.UserLoginResponse
 import com.c23ps076.mogerapp.api.UserLoginRequest
-import com.c23ps076.mogerapp.api.data.GroupInfo
-import com.c23ps076.mogerapp.api.data.IncomeOutcome
-import com.c23ps076.mogerapp.api.data.Member
-import com.c23ps076.mogerapp.api.data.TransactionInfo
+import com.c23ps076.mogerapp.api.data.*
 
 interface ApiService {
     @POST("login")
@@ -29,6 +26,11 @@ interface ApiService {
     fun registerUser(
         @Body request: UserRegisterRequest
     ): Call<UserRegisterResponse>
+
+    @GET("getWallet/{partyName}")
+    fun getWallet(
+        @Path("partyName") partyName: String
+    ): Call<ArrayList<WalletInfo>>
 
     @GET("getPartyList/{email}")
     fun getPartyList(
@@ -65,6 +67,20 @@ interface ApiService {
         @Path("email") email: String,
         @Path("partyName") partyName: String
     ): Call<Int>
+
+    @POST("addTransaction/{partyName}/{createdBy}/{kind}/{fromWallet}/{toWallet}/{amount}/{stamp}/{incomeOutcomeKind}")
+    fun addTransaction(
+        @Path("partyName") partyName: String,
+        @Path("createdBy") createdBy: String,
+        @Path("kind") kind: String,
+        @Path("fromWallet") fromWallet: String,
+        @Path("toWallet") toWallet: String,
+        @Path("amount") amount: String,
+        @Path("stamp") stamp: String,
+        @Path("incomeOutcomeKind") incomeOutcomeKind: String
+    ): Call<Int>
+
+
 
 
 
