@@ -100,7 +100,14 @@ async def get_income_outcome(
     
     return {"income": income, "outcome": outcome}
 
-
+@router.delete("/deleteTransaction/{transactionId}", tags=["Transactions"])
+async def delete_transaction_by_id(transactionId: int, connection=Depends(get_database_connection)):
+    query = f"DELETE FROM transactions WHERE id = {transactionId}"
+    cursor = connection.cursor()
+    cursor.execute(query)
+    connection.commit()
+    cursor.close()
+    return {"message": "Transaction deleted successfully"}
 
 def get_days(partyname, month, year, connection):
     queryfinal = f"SELECT DISTINCT(DAY(stamp)) AS day FROM transactions WHERE partyName = '{partyname}' AND MONTH(stamp) = {month} AND YEAR(stamp) = {year}"

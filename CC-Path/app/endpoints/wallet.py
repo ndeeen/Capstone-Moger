@@ -22,7 +22,7 @@ class Member(BaseModel):
 
 @router.post("/addWallet", tags=["Wallet"])
 async def add_wallet(wallet: Wallet, connection=Depends(get_database_connection)):
-    queryfinal = f"INSERT INTO wallet VALUES ('{wallet.partyName}', '{wallet.walletName}', {wallet.balance}, NULL)"
+    queryfinal = f"INSERT INTO wallet (partyName, walletName, balance) VALUES ('{wallet.partyName}', '{wallet.walletName}', {wallet.balance})"
     cursor = connection.cursor()
     cursor.execute(queryfinal)
     connection.commit()
@@ -31,7 +31,7 @@ async def add_wallet(wallet: Wallet, connection=Depends(get_database_connection)
 
 @router.put('/addMember', tags=["Wallet"])
 async def add_member(member: Member, connection=Depends(get_database_connection)):
-    queryfinal = f"insert into members values ('{member.partyName}', '{member.email}', NULL)"
+    queryfinal = f"insert into members (partyName, email) values ('{member.partyName}', '{member.email}')"
     cursor = connection.cursor()
     cursor.execute(queryfinal)
     connection.commit()
@@ -92,6 +92,25 @@ async def get_member_lists(
 @router.get("/getBalance/{partyName}", tags=["Wallet"])
 async def get_balance(partyName: str = Path(..., description="Party Name"), connection=Depends(get_database_connection)):
     return get_balance_from_party(partyName, connection)
+
+@router.delete("/deleteWalletByParty/{partyName}", tags=["Wallet"])
+async def delete_wallet_by_party(partyName: str = Path(..., description="Party Name"), connection=Depends(get_database_connection)):
+    query = f"DELETE FROM wallet WHERE partyName = '{partyName}'"
+    cursor = connection.cursor()
+    cursor.execute(query)
+    connection.commit()
+    cursor.close()
+    return {"message": "Wallets deleted successfully"}
+
+@router.delete("/deleteWalletByWallet/{walletName}", tags=["Wallet"])
+async def delete_wallet_by_wallet(walletName: str = Path(..., description="Wallet Name"), connection=Depends(get_database_connection)):
+    query = f"DELETE FROM wallet WHERE walletName = '{walletName}'"
+    cursor = connection.cursor()
+    cursor.execute(query)
+    connection.commit()
+    cursor.close()
+    return {"message": "Wallet deleted successfully"}
+
 
 def get_host_email(partyname, connection):
     queryfinal = f"SELECT createdBy FROM party WHERE partyName = '{partyname}'"
