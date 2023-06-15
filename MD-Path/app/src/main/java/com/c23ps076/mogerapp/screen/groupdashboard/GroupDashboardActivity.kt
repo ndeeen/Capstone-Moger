@@ -1,5 +1,6 @@
 package com.c23ps076.mogerapp.screen.groupdashboard
 
+import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,11 +11,13 @@ import android.view.animation.AnimationUtils
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.c23ps076.mogerapp.R
+import com.c23ps076.mogerapp.api.ApiService
 import com.c23ps076.mogerapp.api.data.IncomeOutcome
 import com.c23ps076.mogerapp.api.data.TransactionInfo
 import com.c23ps076.mogerapp.api.utils.Preferences
 import com.c23ps076.mogerapp.api.utils.RetroLazy
 import com.c23ps076.mogerapp.databinding.ActivityGroupDashboardBinding
+import com.c23ps076.mogerapp.screen.membermanagement.MemberManagementActivity
 import kotlinx.android.synthetic.main.activity_group_dashboard.*
 import kotlinx.android.synthetic.main.item_transaction_groupby_day.*
 import retrofit2.Call
@@ -57,6 +60,13 @@ class GroupDashboardActivity : AppCompatActivity() {
             }
             btnNextMonth.setOnClickListener {
                 previousNextMonthYear(1)
+            }
+            btn_manage_member.setOnClickListener {
+                val intentMember = Intent(this@GroupDashboardActivity, MemberManagementActivity::class.java)
+                intentMember.apply {
+                    putExtra("PARTYNAME", partyName)
+                }
+                startActivity(intentMember)
             }
             rv_transactions.setHasFixedSize(true)
             rv_transactions.layoutManager = LinearLayoutManager(this@GroupDashboardActivity)
@@ -101,23 +111,20 @@ class GroupDashboardActivity : AppCompatActivity() {
     }
 
     fun getTransactionData() {
-        RetroLazy.instance.getTransaction(partyName, month.toString(),year.toString())
+        val service = ApiService.create("http://www.wakacipuy.my.id/dokuApp/")
+        service.getTransaction(partyName, month.toString(),year.toString())
             .enqueue(object : Callback<ArrayList<TransactionInfo>>{
                 override fun onResponse(
                     call: Call<ArrayList<TransactionInfo>>,
                     response: Response<ArrayList<TransactionInfo>>
                 ) {
-                    if (response.body()?.size != 0) {
                         response.body()?.let {
                             listTransactionInfo.clear()
                             listTransactionInfo.addAll(it)
                         }
                         val adapter = TransactionParentAdapter(listTransactionInfo)
                         rv_transactions.adapter = adapter
-                    }
-                    else {
-                        Log.e("rv failed", "rv failed")
-                    }
+
                 }
 
                 override fun onFailure(call: Call<ArrayList<TransactionInfo>>, t: Throwable) {
@@ -128,7 +135,8 @@ class GroupDashboardActivity : AppCompatActivity() {
     }
     fun getIncomeOutcome() {
         if (partyName != null) {
-            RetroLazy.instance.getIncomeOutcome(partyName, month.toString(), year.toString())
+            val service = ApiService.create("http://www.wakacipuy.my.id/dokuApp/")
+            service.getIncomeOutcome(partyName, month.toString(), year.toString())
                 .enqueue(object : Callback<IncomeOutcome> {
                     override fun onResponse(
                         call: Call<IncomeOutcome>,

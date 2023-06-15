@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/discord_darkgrey"
-    tools:context=".screen.MemberManagementActivity">
+    tools:context=".screen.membermanagement.MemberManagementActivity">
 
     <EditText
         android:id="@+id/et_member_input"
@@ -29,6 +29,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="60dp"
+        app:cornerRadius="18dp"
+        android:backgroundTint="@color/discord_blue"
         android:text="@string/addmember"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,8 +38,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_email_member"
-        android:layout_width="359dp"
-        android:layout_height="428dp"
+        android:layout_width="355dp"
+        android:layout_height="279dp"
         android:layout_marginTop="100dp"
         app:layout_constraintBottom_toTopOf="@+id/et_member_input"
         app:layout_constraintEnd_toEndOf="parent"

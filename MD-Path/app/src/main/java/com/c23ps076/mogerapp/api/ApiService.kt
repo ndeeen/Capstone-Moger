@@ -16,6 +16,7 @@ import com.c23ps076.mogerapp.api.UserLoginResponse
 import com.c23ps076.mogerapp.api.UserLoginRequest
 import com.c23ps076.mogerapp.api.data.GroupInfo
 import com.c23ps076.mogerapp.api.data.IncomeOutcome
+import com.c23ps076.mogerapp.api.data.Member
 import com.c23ps076.mogerapp.api.data.TransactionInfo
 
 interface ApiService {
@@ -47,6 +48,23 @@ interface ApiService {
         @Path("month") month: String,
         @Path("year") year: String
     ): Call<ArrayList<TransactionInfo>>
+
+    @GET("getMemberLists/{partyName}")
+    fun getMemberLists(
+        @Path("partyName") partyName: String
+    ): Call<ArrayList<Member>>
+
+    @POST("addMember/{email}/{partyName}")
+    fun addMember(
+        @Path("email") email: String,
+        @Path("partyName") partyName: String
+    ): Call<Int>
+
+    @POST("deleteMember/{email}/{partyName}")
+    fun deleteMember(
+        @Path("email") email: String,
+        @Path("partyName") partyName: String
+    ): Call<Int>
 
 
 
