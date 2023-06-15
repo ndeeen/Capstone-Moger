@@ -14,12 +14,6 @@ class Wallet(BaseModel):
     walletName: str
     balance: float
 
-
-class Member(BaseModel):
-    partyName: str
-    email: str
-
-
 @router.post("/addWallet", tags=["Wallet"])
 async def add_wallet(wallet: Wallet, connection=Depends(get_database_connection)):
     queryfinal = f"INSERT INTO wallet (partyName, walletName, balance) VALUES ('{wallet.partyName}', '{wallet.walletName}', {wallet.balance})"
@@ -28,24 +22,6 @@ async def add_wallet(wallet: Wallet, connection=Depends(get_database_connection)
     connection.commit()
     cursor.close()
     return {"message": "Wallet added successfully"}
-
-@router.put('/addMember', tags=["Wallet"])
-async def add_member(member: Member, connection=Depends(get_database_connection)):
-    queryfinal = f"insert into members (partyName, email) values ('{member.partyName}', '{member.email}')"
-    cursor = connection.cursor()
-    cursor.execute(queryfinal)
-    connection.commit()
-    cursor.close()
-    return {"message": "Member added successfully"}
-
-@router.put("/deleteMember", tags=["Wallet"])
-async def delete_member(member: Member, connection=Depends(get_database_connection)):
-    queryfinal = f"DELETE FROM members WHERE partyName = '{member.partyName}' AND email = '{member.email}'"
-    cursor = connection.cursor()
-    cursor.execute(queryfinal)
-    connection.commit()
-    cursor.close()
-    return {"message": "Member deleted successfully"}
 
 @router.get("/getWallet/{partyName}", tags=["Wallet"])
 async def get_wallet(

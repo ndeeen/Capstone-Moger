@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.endpoints import login, register, transaction, wallet
+from app.endpoints import login, register, transaction, wallet, party
 
 app = FastAPI(title="Moger API", description="API yang berisi segala kebutuhan aplikasi Moger")
 
@@ -22,3 +22,4 @@ app.include_router(login.router)
 app.include_router(register.router)
 app.include_router(transaction.router)  
 app.include_router(wallet.router)
+app.include_router(party.router)

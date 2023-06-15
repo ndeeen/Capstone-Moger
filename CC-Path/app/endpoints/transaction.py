@@ -5,7 +5,7 @@ from datetime import datetime
 
 router = APIRouter()
 
-class AddTransaction(BaseModel):
+class TransactionCreate(BaseModel):
     partyName: str
     createdBy: str
     kind: str
@@ -13,7 +13,7 @@ class AddTransaction(BaseModel):
     toWallet: str = None
     amount: float
     stamp: datetime
-    incomeOutcomeKind: str = None
+    IncomeOutcomeKind: str = None
 
 class GetTransaction(BaseModel):
     partyname: str
@@ -26,57 +26,54 @@ class TransactionDay(BaseModel):
     expense: int
 
 @router.post("/addTransaction", tags=["Transactions"])
-async def add_transaction(transaction: AddTransaction, connection=Depends(get_database_connection)):
-
-    if transaction.kind == "transfer":
-        queryfinal = f"insert into transactions (partyName, createdBy, kind, fromWallet, toWallet, amount, stamp, IncomeOutcomeKind) values ('{transaction.partyName}', '{transaction.createdBy}', '{transaction.kind}', '{transaction.fromWallet}', '{transaction.toWallet}', {transaction.amount}, '{transaction.stamp}')"
-        queryminuswallet = f"update wallet set balance = balance - {transaction.amount} where walletName = '{transaction.fromWallet}' and partyName = '{transaction.partyName}'"
-        querypluswallet = f"update wallet set balance = balance + {transaction.amount} where walletName = '{transaction.toWallet}' and partyName = '{transaction.partyName}'"
-        cursor = connection.cursor()
-        cursor.execute(queryfinal)
-        cursor.execute(queryminuswallet)
-        cursor.execute(querypluswallet)
-        
-    elif transaction.kind == "outcome":
-        queryfinal = f"insert into transactions (partyName, createdBy, kind, fromWallet, amount, stamp, IncomeOutcomeKind) values ('{transaction.partyName}', '{transaction.createdBy}', '{transaction.kind}', '{transaction.fromWallet}', {transaction.amount}, '{transaction.stamp}', '{transaction.incomeOutcomeKind}')"
-        queryminuswallet = f"update wallet set balance = balance - {transaction.amount} where walletName = '{transaction.fromWallet}' and partyName = '{transaction.partyName}'"
-        cursor = connection.cursor()
-        cursor.execute(queryfinal)
-        cursor.execute(queryminuswallet)
-
-    else:
-        queryfinal = f"insert into transactions (partyName, createdBy, kind, fromWallet, amount, stamp, IncomeOutcomeKind) values ('{transaction.partyName}', '{transaction.createdBy}', '{transaction.kind}', '{transaction.fromWallet}', {transaction.amount}, '{transaction.stamp}', '{transaction.incomeOutcomeKind}')"
-        querypluswallet = f"update wallet set balance = balance + {transaction.amount} where walletName = '{transaction.fromWallet}' and partyName = '{transaction.partyName}'"
-        cursor = connection.cursor()
-        cursor.execute(queryfinal)
-        cursor.execute(querypluswallet)
-
+async def add_transaction(transaction: TransactionCreate, connection=Depends(get_database_connection)):
+    query = "INSERT INTO transactions (partyName, createdBy, kind, fromWallet, toWallet, amount, stamp, IncomeOutcomeKind) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+    values = (
+        transaction.partyName,
+        transaction.createdBy,
+        transaction.kind,
+        transaction.fromWallet,
+        transaction.toWallet,
+        transaction.amount,
+        transaction.stamp,
+        transaction.IncomeOutcomeKind
+    )
+    cursor = connection.cursor()
+    cursor.execute(query, values)
     connection.commit()
+
+    # Update wallet balances based on transaction kind
+    if transaction.kind == "transfer":
+        update_wallet_balance(connection, transaction.fromWallet, -transaction.amount, partyName=transaction.partyName)
+        update_wallet_balance(connection, transaction.toWallet, transaction.amount, partyName=transaction.partyName)
+    elif transaction.kind == "outcome":
+        update_wallet_balance(connection, transaction.fromWallet, -transaction.amount, partyName=transaction.partyName)
+    elif transaction.kind == "balance":
+        update_wallet_balance(connection, transaction.fromWallet, transaction.amount, partyName=transaction.partyName)
+
     cursor.close()
-    
     return {"message": "Transaction added successfully"}
 
-@router.get("/getTransaction/{partyName}/{month}/{year}", tags=["Transactions"])
-async def get_transaction(
-    partyName: str = Path(..., description="Name of the party"),
+@router.get("/getTransactions/{partyName}/{month}/{year}", tags=["Transactions"])
+async def get_transactions(
+    partyName: str = Path(..., description="Party Name"),
     month: int = Path(..., description="Month"),
     year: int = Path(..., description="Year"),
     connection=Depends(get_database_connection)
 ):
-    month = month + 1
-    data_days = get_days(partyName, month, year, connection)
-    
-    for day in data_days:
-        day["transactions"] = get_transactions_by_day(partyName, day['day'], month, year, connection)
-        expense = 0
-        for transaction in day["transactions"]:
-            if transaction["kind"] == "outcome":
-                expense -= transaction["amount"]
-            elif transaction["kind"] == "income":
-                expense += transaction["amount"]
-        day["expense"] = expense
-    
-    return data_days
+    query = """
+        SELECT *
+        FROM transactions
+        WHERE partyName = %s
+            AND MONTH(stamp) = %s
+            AND YEAR(stamp) = %s
+    """
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute(query, (partyName, month, year))
+    transactions = cursor.fetchall()
+    cursor.close()
+    return transactions
+
 
 @router.get("/getIncomeOutcome/{partyName}/{month}/{year}", tags=["Transactions"])
 async def get_income_outcome(
@@ -109,18 +106,11 @@ async def delete_transaction_by_id(transactionId: int, connection=Depends(get_da
     cursor.close()
     return {"message": "Transaction deleted successfully"}
 
-def get_days(partyname, month, year, connection):
-    queryfinal = f"SELECT DISTINCT(DAY(stamp)) AS day FROM transactions WHERE partyName = '{partyname}' AND MONTH(stamp) = {month} AND YEAR(stamp) = {year}"
+def update_wallet_balance(connection, wallet_name, amount, partyName):
+    query = "UPDATE wallet SET balance = balance + %s WHERE walletName = %s AND partyName = %s"
+    values = (amount, wallet_name, partyName)
     cursor = connection.cursor()
-    cursor.execute(queryfinal)
-    read_rows = cursor.fetchall()
+    cursor.execute(query, values)
+    connection.commit()
     cursor.close()
-    return read_rows
 
-def get_transactions_by_day(partyname, day, month, year, connection):
-    queryfinal = f"SELECT kind, IncomeOutcomeKind, amount, fromWallet, toWallet, createdBy, id FROM transactions WHERE partyName = '{partyname}' AND DAY(stamp) = {day} AND MONTH(stamp) = {month} AND YEAR(stamp) = {year}"
-    cursor = connection.cursor()
-    cursor.execute(queryfinal)
-    read_rows = cursor.fetchall()
-    cursor.close()
-    return read_rows
