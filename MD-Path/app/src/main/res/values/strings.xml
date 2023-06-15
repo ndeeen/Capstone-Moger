@@ -51,4 +51,8 @@
     <string name="input_date">Date (YYYY-MM-DD)</string>
     <string name="wallet">Wallet</string>
     <string name="add">Add</string>
+    <string name="walletname">Wallet Name</string>
+    <string name="balance">Balance</string>
+    <string name="addwallet">Add Wallet</string>
+    <string name="total">Total</string>
 </resources>
