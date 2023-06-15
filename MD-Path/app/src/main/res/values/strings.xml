@@ -45,4 +45,10 @@
     <string name="createdBy">Created By</string>
     <string name="typeanemail">Type an Email</string>
     <string name="addmember">Add Member</string>
+    <string name="transfer">Transfer</string>
+    <string name="selectedKind">Transaction Kind: %1$s"</string>
+
+    <string name="input_date">Date (YYY-MM-DD)</string>
+    <string name="wallet">Wallet</string>
+    <string name="add">Add</string>
 </resources>

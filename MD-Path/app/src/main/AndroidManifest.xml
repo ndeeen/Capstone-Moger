@@ -20,6 +20,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".screen.addTransaction.AddTransactionActivity"
+            android:exported="false" />
+        <activity
             android:name=".screen.membermanagement.MemberManagementActivity"
             android:exported="false" />
         <activity
