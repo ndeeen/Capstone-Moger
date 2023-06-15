@@ -80,6 +80,17 @@ interface ApiService {
         @Path("incomeOutcomeKind") incomeOutcomeKind: String
     ): Call<Int>
 
+    @GET("getBalance/{partyName}")
+    fun getBalance(
+        @Path("partyName") partyName: String
+    ): Call<ArrayList<BalanceInfo>>
+
+    @POST("addWallet/{partyName}/{walletName}/{balance}")
+    fun addWallet(
+        @Path("partyName") partyName: String,
+        @Path("walletName") walletName:String,
+        @Path("balance") balance: String
+    ): Call<Int>
 
 
 

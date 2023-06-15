@@ -19,6 +19,7 @@ import com.c23ps076.mogerapp.api.utils.RetroLazy
 import com.c23ps076.mogerapp.databinding.ActivityGroupDashboardBinding
 import com.c23ps076.mogerapp.screen.addTransaction.AddTransactionActivity
 import com.c23ps076.mogerapp.screen.membermanagement.MemberManagementActivity
+import com.c23ps076.mogerapp.screen.walletManagement.WalletManagementActivity
 import kotlinx.android.synthetic.main.activity_group_dashboard.*
 import kotlinx.android.synthetic.main.item_transaction_groupby_day.*
 import retrofit2.Call
@@ -71,6 +72,13 @@ class GroupDashboardActivity : AppCompatActivity() {
             }
             btnAddTransaction.setOnClickListener {
                 val intentMember = Intent(this@GroupDashboardActivity, AddTransactionActivity::class.java)
+                intentMember.apply {
+                    putExtra("PARTYNAME", partyName)
+                }
+                startActivity(intentMember)
+            }
+            btnManageWallet.setOnClickListener {
+                val intentMember = Intent(this@GroupDashboardActivity, WalletManagementActivity::class.java)
                 intentMember.apply {
                     putExtra("PARTYNAME", partyName)
                 }
