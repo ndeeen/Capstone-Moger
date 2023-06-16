@@ -87,6 +87,14 @@ async def delete_wallet_by_wallet(walletName: str = Path(..., description="Walle
     cursor.close()
     return {"message": "Wallet deleted successfully"}
 
+@router.delete("/deleteWalletByPartyAndWallet/{partyName}/{walletName}", tags=["Wallet"])
+async def delete_wallet_by_party_and_wallet(partyName: str = Path(..., description="Party Name"), walletName: str = Path(..., description="Wallet Name"), connection=Depends(get_database_connection)):
+    query = f"DELETE FROM wallet WHERE partyName = '{partyName}' AND walletName = '{walletName}'"
+    cursor = connection.cursor()
+    cursor.execute(query)
+    connection.commit()
+    cursor.close()
+    return {"message": "Wallet deleted successfully"}
 
 def get_host_email(partyname, connection):
     queryfinal = f"SELECT createdBy FROM party WHERE partyName = '{partyname}'"
