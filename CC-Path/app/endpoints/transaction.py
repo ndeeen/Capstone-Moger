@@ -54,7 +54,7 @@ async def add_transaction(transaction: TransactionCreate, connection=Depends(get
     cursor.close()
     return {"message": "Transaction added successfully"}
 
-@router.get("/getTransactions/{partyName}/{month}/{year}", tags=["Transactions"])
+# @router.get("/getMonthlyTransactions/{partyName}/{month}/{year}", tags=["Transactions"])
 async def get_transactions(
     partyName: str = Path(..., description="Party Name"),
     month: int = Path(..., description="Month"),
@@ -73,6 +73,65 @@ async def get_transactions(
     transactions = cursor.fetchall()
     cursor.close()
     return transactions
+
+@router.get("/getMonthlyTransactionsByDay/{partyName}/{month}/{year}", tags=["Transactions"])
+async def get_transactions_by_day(
+    partyName: str = Path(..., description="Party Name"),
+    month: int = Path(..., description="Month"),
+    year: int = Path(..., description="Year"),
+    connection=Depends(get_database_connection)
+):
+    query = """
+        SELECT DAY(stamp) AS day, SUM(amount) AS expense
+        FROM transactions
+        WHERE partyName = %s
+            AND MONTH(stamp) = %s
+            AND YEAR(stamp) = %s
+        GROUP BY DAY(stamp)
+    """
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute(query, (partyName, month, year))
+    transactions = cursor.fetchall()
+    cursor.close()
+    return transactions
+
+@router.get("/getMonthlyTransactions/{partyName}/{month}/{year}", tags=["Transactions"])
+async def get_monthly_transactions(
+    partyName: str = Path(..., description="Party Name"),
+    month: int = Path(..., description="Month"),
+    year: int = Path(..., description="Year"),
+    connection=Depends(get_database_connection)
+):
+    transactions = await get_transactions(partyName, month, year, connection)
+    transactions_by_day = await get_transactions_by_day(partyName, month, year, connection)
+
+    # Create a dictionary to store the results
+    result = []
+
+    # Iterate over each day's data from transactions_by_day
+    for day_data in transactions_by_day:
+        day = day_data["day"]
+        expense = day_data["expense"]
+        
+        # Create a dictionary for each day
+        day_transactions = {
+            "day": day,
+            "expense": expense,
+            "transactions": []
+        }
+        
+        # Find transactions for the current day from transactions
+        for transaction in transactions:
+            if transaction["stamp"].day == day:
+                day_transactions["transactions"].append(transaction)
+        
+        # Append the day's data to the result
+        result.append(day_transactions)
+
+    # Sort the result by day in ascending order
+    result = sorted(result, key=lambda x: x["day"])
+    
+    return result
 
 
 @router.get("/getIncomeOutcome/{partyName}/{month}/{year}", tags=["Transactions"])
