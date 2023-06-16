@@ -55,4 +55,25 @@
     <string name="balance">Balance</string>
     <string name="addwallet">Add Wallet</string>
     <string name="total">Total</string>
+    <string name="groupname">Group Name</string>
+    <string name="creategroup">Create Group</string>
+    <string name="retrieveFail">Data Retrieve Failed</string>
+    <string name="walletadded">Wallet Added Successfully</string>
+    <string name="walletaddFailed">Failed to Add Wallet</string>
+    
+    <string name="transactionadded">Transaction Added Successfully</string>
+    <string name="transactionFailed">Failed to Add Transaction</string>
+
+    <string name="memberadded">Member added Successfully</string>
+    <string name="memberaddFaied">Failed to Add Member</string>
+    <string name="formatDate">%1$s 00:00:01</string>
+
+    <string name="groupAdded">Group Created Sucessfully</string>
+    <string name="groupAddFailed">Failed to create Group</string>
+
+    <string name="barTransaction">%1$s - Transaction</string>
+    <string name="barAddTransaction">%1$s - Add Transaction</string>
+    <string name="barWalletManagement">%1$s - Wallet Management</string>
+    <string name="barMemberManagement">%1$s - Member Management</string>
+    <string name="barCreateNewGroup">Create New Group</string>
 </resources>

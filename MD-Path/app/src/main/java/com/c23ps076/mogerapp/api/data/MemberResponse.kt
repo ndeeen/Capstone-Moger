@@ -10,3 +10,7 @@ data class Member(
     val isHost: Int
 )
 
+data class MemberRequest(
+    val partyName: String,
+    val email: String
+)

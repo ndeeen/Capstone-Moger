@@ -10,7 +10,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        buildConfigField("String", "BASE_URL", '"https://coba-deploy-ar2pcwmwza-et.a.run.app/"')
+        buildConfigField("String", "BASE_URL", '"https://moger-backend-j5hiwtpd6q-et.a.run.app/"')
         applicationId "com.c23ps076.mogerapp"
         minSdk 21
         targetSdk 33
@@ -22,11 +22,11 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField "String", "BASE_URL", '"https://coba-deploy-ar2pcwmwza-et.a.run.app/"'
+            buildConfigField "String", "BASE_URL", '"https://moger-backend-j5hiwtpd6q-et.a.run.app/"'
             buildConfigField "String", "PREF_NAME", '"usr_login"'
         }
         release {
-            buildConfigField "String", "BASE_URL", '"https://coba-deploy-ar2pcwmwza-et.a.run.app/"'
+            buildConfigField "String", "BASE_URL", '"https://moger-backend-j5hiwtpd6q-et.a.run.app/"'
             buildConfigField "String", "PREF_NAME", '"usr_login"'
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'

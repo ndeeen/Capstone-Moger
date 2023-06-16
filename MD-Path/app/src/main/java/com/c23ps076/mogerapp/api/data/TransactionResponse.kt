@@ -35,3 +35,14 @@ data class transaction(
     @field:SerializedName("toWallet")
     val toWallet: String?
 )
+
+data class TransactionRequest(
+    val partyName: String,
+    val createdBy: String,
+    val kind: String,
+    val fromWallet: String,
+    val toWallet: String?,
+    val amount: Int,
+    val stamp: String,
+    val IncomeOutcomeKind: String?
+)

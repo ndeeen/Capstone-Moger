@@ -3,7 +3,6 @@ package com.c23ps076.mogerapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import com.c23ps076.mogerapp.api.utils.Preferences
 import com.c23ps076.mogerapp.screen.auth.login.LoginActivity
 import com.c23ps076.mogerapp.screen.groupList.GroupListActivity
@@ -14,7 +13,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         userLogPreference = Preferences(this)
-        Log.e("logMainPref", userLogPreference.getLoginData().toString())
         if (userLogPreference.getLoginData().still_login == false) {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)

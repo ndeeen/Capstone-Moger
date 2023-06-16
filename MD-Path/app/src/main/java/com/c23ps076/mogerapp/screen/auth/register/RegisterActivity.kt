@@ -38,7 +38,6 @@ class RegisterActivity : AppCompatActivity() {
 
         activityRegisterBinding?.apply {
             btnRegister.setOnClickListener {
-                showLoading(true)
                 validateRegisterField()
             }
             btnBack.setOnClickListener {
@@ -63,6 +62,7 @@ class RegisterActivity : AppCompatActivity() {
             activityRegisterBinding?.etRegPassword?.error = getString(R.string.passRule)
         }
         else {
+            showLoading(true)
             register()
         }
     }

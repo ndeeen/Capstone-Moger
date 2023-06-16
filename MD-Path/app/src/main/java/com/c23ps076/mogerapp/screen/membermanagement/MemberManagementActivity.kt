@@ -1,12 +1,16 @@
 package com.c23ps076.mogerapp.screen.membermanagement
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.c23ps076.mogerapp.BuildConfig.BASE_URL
+import com.c23ps076.mogerapp.R
 import com.c23ps076.mogerapp.api.ApiService
 import com.c23ps076.mogerapp.api.data.Member
+import com.c23ps076.mogerapp.api.data.MemberRequest
+import com.c23ps076.mogerapp.api.data.MessageResponse
 import com.c23ps076.mogerapp.api.utils.Preferences
 import com.c23ps076.mogerapp.databinding.ActivityMemberManagementBinding
 import kotlinx.android.synthetic.main.activity_member_management.*
@@ -26,24 +30,27 @@ class MemberManagementActivity : AppCompatActivity() {
         userLogPreferences = Preferences(this)
 
         partyName = intent.getStringExtra("PARTYNAME").toString()
-        supportActionBar?.title = partyName
+        supportActionBar?.title = String.format(getString(R.string.barMemberManagement), partyName)
         supportActionBar?.show()
 
         activityMemberManagementBinding?.apply {
             rv_email_member.setHasFixedSize(true)
             rv_email_member.layoutManager = LinearLayoutManager(this@MemberManagementActivity)
         }
+
+        showLoading(true)
         getMemberList()
 
         activityMemberManagementBinding?.apply {
             btnAddMember.setOnClickListener{
+                showLoading(true)
                 addMember()
             }
         }
     }
 
     fun getMemberList() {
-        val service = ApiService.create("http://www.wakacipuy.my.id/dokuApp/")
+        val service = ApiService.create(BASE_URL)
         service.getMemberLists(partyName)
             .enqueue(object : Callback<ArrayList<Member>>{
                 override fun onResponse(
@@ -56,34 +63,51 @@ class MemberManagementActivity : AppCompatActivity() {
                     }
                     val adapter = MemberManagementAdapter(listMember, partyName)
                     rv_email_member.adapter = adapter
+                    showLoading(false)
                 }
 
                 override fun onFailure(call: Call<ArrayList<Member>>, t: Throwable) {
-                    t.message?.let { Log.e("", it) }
+                    showMessage(getString(R.string.retrieveFail))
+                    showLoading(false)
                 }
 
             })
     }
 
     fun addMember() {
-        val email = activityMemberManagementBinding?.etMemberInput?.text?.toString()?.trim()
+        val email = activityMemberManagementBinding?.etMemberInput?.text?.toString()
         if (email != null && partyName != null) {
-            val service = ApiService.create("http://www.wakacipuy.my.id/dokuApp/")
-            service.addMember(email, partyName)
-                .enqueue(object : Callback<Int> {
-                    override fun onResponse(call: Call<Int>, response: Response<Int>) {
-                        Log.e("", "Member Added")
+            val request = MemberRequest(partyName, email)
+            val service = ApiService.create(BASE_URL)
+            service.addMember(request)
+                .enqueue(object : Callback<MessageResponse> {
+                    override fun onResponse(call: Call<MessageResponse>, response: Response<MessageResponse>) {
+                        showMessage(getString(R.string.memberadded))
+                        showLoading(false)
                         refresh()
                     }
 
-                    override fun onFailure(call: Call<Int>, t: Throwable) {
-                        Log.e("", "Failed Member Add")
+                    override fun onFailure(call: Call<MessageResponse>, t: Throwable) {
+                        showMessage(getString(R.string.memberaddFaied))
+                        showLoading(false)
                     }
 
                 })
         }
     }
 
+    private fun showMessage(message: String) {
+        Toast.makeText(this ,message, Toast.LENGTH_LONG).show()
+    }
+
+    private fun showLoading(status: Boolean) {
+        if (status) {
+            activityMemberManagementBinding?.progressBar6?.visibility = View.VISIBLE
+        }
+        else {
+            activityMemberManagementBinding?.progressBar6?.visibility = View.INVISIBLE
+        }
+    }
     fun refresh() {
         this.recreate()
     }

@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_transaction_wallet.view.*
 import com.c23ps076.mogerapp.R
 import com.c23ps076.mogerapp.api.data.WalletInfo
-import com.c23ps076.mogerapp.databinding.ActivityAddTransactionBinding
 
 class WalletTransactionAdapter(private val listWallet: ArrayList<WalletInfo>)
     :RecyclerView.Adapter<WalletTransactionAdapter.WalletHolder>(){

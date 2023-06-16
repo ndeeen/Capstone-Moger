@@ -8,6 +8,7 @@ import com.c23ps076.mogerapp.R
 import com.c23ps076.mogerapp.databinding.ActivityProfileBinding
 import com.c23ps076.mogerapp.api.utils.Preferences
 import com.c23ps076.mogerapp.screen.auth.login.LoginActivity
+import com.c23ps076.mogerapp.screen.groupList.GroupListActivity
 
 class ProfileActivity : AppCompatActivity() {
     private lateinit var activityProfileBinding: ActivityProfileBinding
@@ -32,9 +33,17 @@ class ProfileActivity : AppCompatActivity() {
             btnLogout.setOnClickListener {
                 logout()
             }
+            btnProfileBack.setOnClickListener {
+                moveBack()
+            }
         }
     }
 
+    private fun moveBack() {
+        val intentBack = Intent(this, GroupListActivity::class.java)
+        finishAffinity()
+        startActivity(intentBack)
+    }
     private fun logout() {
         val alertDialog = AlertDialog.Builder(this)
             .setTitle(getString(R.string.logout))
