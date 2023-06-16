@@ -1,7 +1,5 @@
 package com.c23ps076.mogerapp.screen.auth.register
 
-import android.util.Log
-import androidx.datastore.preferences.protobuf.Api
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

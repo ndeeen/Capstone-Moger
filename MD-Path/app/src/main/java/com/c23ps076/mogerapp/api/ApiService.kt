@@ -1,19 +1,13 @@
 package com.c23ps076.mogerapp.api
-import com.google.gson.FieldNamingPolicy
+
 import com.google.gson.GsonBuilder
-import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
-import okhttp3.RequestBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import java.util.concurrent.TimeUnit
-import com.c23ps076.mogerapp.BuildConfig.BASE_URL
-
-import com.c23ps076.mogerapp.api.UserLoginResponse
-import com.c23ps076.mogerapp.api.UserLoginRequest
 import com.c23ps076.mogerapp.api.data.*
 
 interface ApiService {
@@ -44,7 +38,7 @@ interface ApiService {
         @Path("year") year: String
     ): Call<IncomeOutcome>
 
-    @GET("getTransaction/{partyName}/{month}/{year}")
+    @GET("getMonthlyTransactions/{partyName}/{month}/{year}")
     fun getTransaction(
         @Path("partyName") partyName: String,
         @Path("month") month: String,
@@ -56,42 +50,46 @@ interface ApiService {
         @Path("partyName") partyName: String
     ): Call<ArrayList<Member>>
 
-    @POST("addMember/{email}/{partyName}")
+    @POST("addMember")
     fun addMember(
-        @Path("email") email: String,
-        @Path("partyName") partyName: String
-    ): Call<Int>
+        @Body request: MemberRequest
+    ): Call<MessageResponse>
 
-    @POST("deleteMember/{email}/{partyName}")
+    @POST("deleteMember")
     fun deleteMember(
-        @Path("email") email: String,
-        @Path("partyName") partyName: String
-    ): Call<Int>
+        @Body request: MemberRequest
+    ): Call<MessageResponse>
 
-    @POST("addTransaction/{partyName}/{createdBy}/{kind}/{fromWallet}/{toWallet}/{amount}/{stamp}/{incomeOutcomeKind}")
+    @POST("addTransaction")
     fun addTransaction(
-        @Path("partyName") partyName: String,
-        @Path("createdBy") createdBy: String,
-        @Path("kind") kind: String,
-        @Path("fromWallet") fromWallet: String,
-        @Path("toWallet") toWallet: String,
-        @Path("amount") amount: String,
-        @Path("stamp") stamp: String,
-        @Path("incomeOutcomeKind") incomeOutcomeKind: String
-    ): Call<Int>
+        @Body request: TransactionRequest
+    ): Call<MessageResponse>
 
     @GET("getBalance/{partyName}")
     fun getBalance(
         @Path("partyName") partyName: String
     ): Call<ArrayList<BalanceInfo>>
 
-    @POST("addWallet/{partyName}/{walletName}/{balance}")
+    @POST("addWallet")
     fun addWallet(
-        @Path("partyName") partyName: String,
-        @Path("walletName") walletName:String,
-        @Path("balance") balance: String
-    ): Call<Int>
+        @Body request: WalletRequest
+    ): Call<MessageResponse>
 
+    @POST("deleteWalletByPartyAndWallet/{partyName}/{walletName}")
+    fun deleteWallet(
+        @Path("partyName") partyName: String,
+        @Path("walletName") walletName: String
+    ): Call<MessageResponse>
+
+    @POST("deleteTransaction/{transactionId}")
+    fun deleteTransaction(
+        @Path("transactionId") transactionId: Int
+    ): Call<MessageResponse>
+
+    @POST("createParty")
+    fun createParty(
+        @Body request: CreateGroupRequest
+    ): Call<MessageResponse>
 
 
 
@@ -102,7 +100,6 @@ interface ApiService {
         private val gson = GsonBuilder()
             .setPrettyPrinting()
             .setLenient()
-            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .create()
 
         private val loggingInterceptor = HttpLoggingInterceptor().apply {

@@ -2,16 +2,17 @@ package com.c23ps076.mogerapp.screen.walletManagement
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.c23ps076.mogerapp.BuildConfig.BASE_URL
 import com.c23ps076.mogerapp.R
 import com.c23ps076.mogerapp.api.ApiService
 import com.c23ps076.mogerapp.api.data.BalanceInfo
+import com.c23ps076.mogerapp.api.data.MessageResponse
 import com.c23ps076.mogerapp.api.data.WalletInfo
-import com.c23ps076.mogerapp.databinding.ActivityMemberManagementBinding
+import com.c23ps076.mogerapp.api.data.WalletRequest
 import com.c23ps076.mogerapp.databinding.ActivityWalletManagementBinding
-import com.c23ps076.mogerapp.screen.addTransaction.WalletTransactionAdapter
-import kotlinx.android.synthetic.main.activity_add_transaction.*
 import kotlinx.android.synthetic.main.activity_wallet_management.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -27,7 +28,7 @@ class WalletManagementActivity : AppCompatActivity() {
         setContentView(activityWalletManagementBinding.root)
 
         partyName = intent.getStringExtra("PARTYNAME").toString()
-        supportActionBar?.title = partyName
+        supportActionBar?.title = String.format(getString(R.string.barWalletManagement), partyName)
         supportActionBar?.show()
         activityWalletManagementBinding?.apply {
             rv_wallet_management.setHasFixedSize(true)
@@ -36,6 +37,7 @@ class WalletManagementActivity : AppCompatActivity() {
         initialize()
         activityWalletManagementBinding?.apply {
             btnAddWallet.setOnClickListener {
+                showLoading(true)
                 addWallet()
                 refresh()
             }
@@ -43,47 +45,49 @@ class WalletManagementActivity : AppCompatActivity() {
     }
 
     private fun initialize() {
+        showLoading(true)
         getBalance()
         getWalletData()
     }
 
     private fun getBalance() {
-        val service = ApiService.create("http://www.wakacipuy.my.id/dokuApp/")
+        val service = ApiService.create(BASE_URL)
         service.getBalance(partyName)
             .enqueue(object: Callback<ArrayList<BalanceInfo>>{
                 override fun onResponse(
                     call: Call<ArrayList<BalanceInfo>>,
                     response: Response<ArrayList<BalanceInfo>>
                 ) {
-                    tv_total_balance.text = String.format(getString(R.string.moneyValue), response?.body()?.get(0)?.ballance.toString())
+                    tv_total_balance.text = String.format(getString(R.string.moneyValue), response?.body()?.get(0)?.balance.toString())
                 }
 
                 override fun onFailure(call: Call<ArrayList<BalanceInfo>>, t: Throwable) {
-                    Log.e("", "Retrieve balance failed")
+                    showMessage(getString(R.string.retrieveFail))
                 }
 
             })
     }
 
     private fun getWalletData() {
-        val service = ApiService.create("http://www.wakacipuy.my.id/dokuApp/")
+        val service = ApiService.create(BASE_URL)
         service.getWallet(partyName)
             .enqueue(object: Callback<ArrayList<WalletInfo>> {
                 override fun onResponse(
                     call: Call<ArrayList<WalletInfo>>,
                     response: Response<ArrayList<WalletInfo>>
                 ) {
-                    Log.e("walletdata", response.body().toString())
                     response.body()?.let {
                         listWallet.clear()
                         listWallet.addAll(it)
                     }
-                    val adapter = WalletManagementAdapter(listWallet)
+                    val adapter = WalletManagementAdapter(listWallet, partyName)
                     rv_wallet_management.adapter = adapter
+                    showLoading(false)
                 }
 
                 override fun onFailure(call: Call<ArrayList<WalletInfo>>, t: Throwable) {
-                    Log.e("", "failed retrive wallet data")
+                    showMessage(getString(R.string.retrieveFail))
+                    showLoading(false)
                 }
 
             })
@@ -91,23 +95,39 @@ class WalletManagementActivity : AppCompatActivity() {
 
     private fun addWallet() {
         val walletName = et_wallet_name.text.toString()
-        val balance = et_balance.text.toString()
+        val balance = Integer.parseInt(et_balance.text.toString())
 
         if (walletName != null && balance != null) {
-            val service = ApiService.create("http://www.wakacipuy.my.id/dokuApp/")
-            service.addWallet(partyName, walletName, balance)
-                .enqueue(object : Callback<Int> {
-                    override fun onResponse(call: Call<Int>, response: Response<Int>) {
-                        Log.e("", "add wallet success")
+            val service = ApiService.create(BASE_URL)
+            val requestBody = WalletRequest(partyName, walletName, balance)
+            service.addWallet(requestBody)
+                .enqueue(object : Callback<MessageResponse> {
+                    override fun onFailure(call: Call<MessageResponse>, t: Throwable) {
+                        showMessage(getString(R.string.walletadded))
+                        showLoading(false)
                     }
 
-                    override fun onFailure(call: Call<Int>, t: Throwable) {
-                        Log.e("", "add wallet failed")
+                    override fun onResponse(call: Call<MessageResponse>, response: Response<MessageResponse>) {
+                        showMessage(getString(R.string.walletaddFailed))
+                        showLoading(false)
                     }
 
                 })
         }
 
+    }
+
+    private fun showMessage(message: String) {
+        Toast.makeText(this ,message, Toast.LENGTH_LONG).show()
+    }
+
+    private fun showLoading(status: Boolean) {
+        if (status) {
+            activityWalletManagementBinding?.progressBar4?.visibility = View.VISIBLE
+        }
+        else {
+            activityWalletManagementBinding?.progressBar4?.visibility = View.INVISIBLE
+        }
     }
 
     private fun refresh() {

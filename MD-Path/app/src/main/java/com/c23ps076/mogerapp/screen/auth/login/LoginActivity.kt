@@ -39,9 +39,7 @@ class LoginActivity : AppCompatActivity() {
 
         activityLoginBinding?.apply {
             button.setOnClickListener {
-                showLoading(true)
                 validateLoginField()
-                showLoading(false)
             }
             tvSignUp.setOnClickListener {
                 startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
@@ -71,8 +69,10 @@ class LoginActivity : AppCompatActivity() {
             return
         }
         else {
+            showLoading(true)
             login()
         }
+
     }
 
     private fun showLoading(status: Boolean) {

@@ -1,13 +1,10 @@
 package com.c23ps076.mogerapp.screen.auth.login
 
-import android.util.Log
-import androidx.datastore.preferences.protobuf.Api
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.c23ps076.mogerapp.BuildConfig.BASE_URL
 import com.c23ps076.mogerapp.api.ApiService
-import com.c23ps076.mogerapp.api.Retro
 import com.c23ps076.mogerapp.api.UserLoginRequest
 import com.c23ps076.mogerapp.api.UserLoginResponse
 import retrofit2.Call
@@ -38,7 +35,6 @@ class LoginViewModel: ViewModel() {
                 ) {
                     _statusLoading.value = false
                     _userLogin.value = response.body()
-                    Log.e("respon", response.body().toString())
                     if (response.body()?.status_login == true) {
                         _responseMessage.value = "Login Success"
                     }

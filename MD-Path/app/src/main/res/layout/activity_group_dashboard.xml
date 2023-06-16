@@ -128,7 +128,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_transactions"
-        android:layout_width="409dp"
+        android:layout_width="match_parent"
         android:layout_height="656dp"
         android:layout_marginTop="1dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -175,4 +175,14 @@
         app:layout_constraintBottom_toTopOf="@+id/btn_manage_member"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/baseline_monetization_on_24" />
+
+    <ProgressBar
+        android:id="@+id/progressBar3"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/linearLayout2" />
 </androidx.constraintlayout.widget.ConstraintLayout>
