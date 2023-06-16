@@ -37,6 +37,7 @@ def getContour(contours):
 
 
 def contourToRect(contour):
+    resizeRatio = 500.0 / contour.shape[0]
     points = contour.reshape(4, 2)
     rectangle = np.zeros((4, 2), dtype=np.float32)
     s = points.sum(axis=1)

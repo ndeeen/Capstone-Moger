@@ -60,12 +60,8 @@ def processImage():
     # Threshold the image
     processedImage = blackAndWhite(scannedContour)
 
-    return processedImage
-
-
-def performOCR(image):
     # Perform OCR and get bounding box information
-    part = pytesseract.image_to_data(image, output_type=Output.DICT)
+    part = pytesseract.image_to_data(processedImage, output_type=Output.DICT)
 
     # Get the number of detected boxes
     nBoxes = len(part['level'])
@@ -187,3 +183,12 @@ def performOCR(image):
 
     # return the JSON string
     return jsonify(itemWithCosts)
+
+
+@app.route('/')
+def index():
+    return "Machine Learning Path API"
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
