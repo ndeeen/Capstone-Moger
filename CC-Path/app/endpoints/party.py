@@ -26,7 +26,7 @@ async def create_party(party: Party, connection=Depends(get_database_connection)
     cursor.close()
     return {"message": "Party added successfully"}
 
-@router.put('/addMember', tags=["Party"])
+@router.post('/addMember', tags=["Party"])
 async def add_member(member: Member, connection=Depends(get_database_connection)):
     query = "insert into members (partyName, email) values (%s, %s)"
     cursor = connection.cursor()
@@ -35,7 +35,7 @@ async def add_member(member: Member, connection=Depends(get_database_connection)
     cursor.close()
     return {"message": "Member added successfully"}
 
-@router.put("/deleteMember", tags=["Party"])
+@router.post("/deleteMember", tags=["Party"])
 async def delete_member(member: Member, connection=Depends(get_database_connection)):
     query = "DELETE FROM members WHERE partyName = %s AND email = %s"
     cursor = connection.cursor()
@@ -44,7 +44,7 @@ async def delete_member(member: Member, connection=Depends(get_database_connecti
     cursor.close()
     return {"message": "Member deleted successfully"}
 
-@router.delete("/deleteParty/{partyName}", tags=["Party"])
+@router.post("/deleteParty/{partyName}", tags=["Party"])
 async def delete_party(partyName: str, connection=Depends(get_database_connection)):
     query = "DELETE FROM party WHERE partyName = %s"
     cursor = connection.cursor()

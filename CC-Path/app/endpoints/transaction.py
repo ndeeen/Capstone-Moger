@@ -105,30 +105,31 @@ async def get_monthly_transactions(
     transactions = await get_transactions(partyName, month, year, connection)
     transactions_by_day = await get_transactions_by_day(partyName, month, year, connection)
 
-    # Create a dictionary to store the results
     result = []
 
-    # Iterate over each day's data from transactions_by_day
     for day_data in transactions_by_day:
         day = day_data["day"]
-        expense = day_data["expense"]
+        expense = 0
         
-        # Create a dictionary for each day
         day_transactions = {
             "day": day,
             "expense": expense,
             "transactions": []
         }
         
-        # Find transactions for the current day from transactions
         for transaction in transactions:
             if transaction["stamp"].day == day:
                 day_transactions["transactions"].append(transaction)
+                
+                if transaction["kind"] == "income":
+                    expense += transaction["amount"]
+                elif transaction["kind"] == "outcome":
+                    expense -= transaction["amount"]
         
-        # Append the day's data to the result
+        day_transactions["expense"] = expense
+        
         result.append(day_transactions)
-
-    # Sort the result by day in ascending order
+    
     result = sorted(result, key=lambda x: x["day"])
     
     return result
@@ -156,7 +157,7 @@ async def get_income_outcome(
     
     return {"income": income, "outcome": outcome}
 
-@router.delete("/deleteTransaction/{transactionId}", tags=["Transactions"])
+@router.post("/deleteTransaction/{transactionId}", tags=["Transactions"])
 async def delete_transaction_by_id(transactionId: int, connection=Depends(get_database_connection)):
     query = f"DELETE FROM transactions WHERE id = {transactionId}"
     cursor = connection.cursor()

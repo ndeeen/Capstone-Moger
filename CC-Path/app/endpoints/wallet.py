@@ -69,7 +69,7 @@ async def get_member_lists(
 async def get_balance(partyName: str = Path(..., description="Party Name"), connection=Depends(get_database_connection)):
     return get_balance_from_party(partyName, connection)
 
-@router.delete("/deleteWalletByParty/{partyName}", tags=["Wallet"])
+@router.post("/deleteWalletByParty/{partyName}", tags=["Wallet"])
 async def delete_wallet_by_party(partyName: str = Path(..., description="Party Name"), connection=Depends(get_database_connection)):
     query = f"DELETE FROM wallet WHERE partyName = '{partyName}'"
     cursor = connection.cursor()
@@ -78,7 +78,7 @@ async def delete_wallet_by_party(partyName: str = Path(..., description="Party N
     cursor.close()
     return {"message": "Wallets deleted successfully"}
 
-@router.delete("/deleteWalletByWallet/{walletName}", tags=["Wallet"])
+@router.post("/deleteWalletByWallet/{walletName}", tags=["Wallet"])
 async def delete_wallet_by_wallet(walletName: str = Path(..., description="Wallet Name"), connection=Depends(get_database_connection)):
     query = f"DELETE FROM wallet WHERE walletName = '{walletName}'"
     cursor = connection.cursor()
@@ -87,7 +87,7 @@ async def delete_wallet_by_wallet(walletName: str = Path(..., description="Walle
     cursor.close()
     return {"message": "Wallet deleted successfully"}
 
-@router.delete("/deleteWalletByPartyAndWallet/{partyName}/{walletName}", tags=["Wallet"])
+@router.post("/deleteWalletByPartyAndWallet/{partyName}/{walletName}", tags=["Wallet"])
 async def delete_wallet_by_party_and_wallet(partyName: str = Path(..., description="Party Name"), walletName: str = Path(..., description="Wallet Name"), connection=Depends(get_database_connection)):
     query = f"DELETE FROM wallet WHERE partyName = '{partyName}' AND walletName = '{walletName}'"
     cursor = connection.cursor()
